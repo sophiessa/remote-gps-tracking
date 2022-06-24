@@ -8,7 +8,7 @@ In this project you can find how to make your own _GPS_ tracker that can be moni
 ### Other things used
 - [Arduino IDE](https://www.arduino.cc/)
 - [Flutter](https://flutter.dev/)
-- [Node](https://nodejs.org/en/)
+- [NodeJS](https://nodejs.org/en/)
 -	[Socket.IO](https://socket.io/)
 - [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol)
 - [2GIS](https://info.2gis.com/)
