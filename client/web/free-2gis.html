@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>2GIS Map</title>
+        <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
+        <script src="SERVER_IP:SERVER_PORT/socket.io/socket.io.js"></script>
+        <script type="text/javascript">
+            var map;
+            DG.then(() => {
+                let lattitude = 0;
+                let longitude = 0;
+                let zoom = 10;
+                map = DG.map('map', {
+                    center: [lattitude, longitude],
+                    zoom: zoom
+                });
+            });
+
+            var socket = io('SERVER_IP:SERVER_PORT');
+            
+            socket.on('connect', () => {
+                console.log('I am connected')
+            });
+
+            socket.on('message', (obj) => {
+                console.log(obj);
+                
+                let lat = +(obj['lattitude']);
+                let lng = +(obj['longitude']);
+                let time = parseInt(obj['time']);
+                let bus = obj['bus'];
+
+                let lattitude = (Math.floor(lat/100)+(lat%100)/60);
+                let longitude = (Math.floor(lng/100)+(lng%100)/60);
+
+                DG.marker([lattitude, longitude]).addTo(map);
+            });
+        </script>
+    </head>
+    <body>
+        <div id="map" style="position: fixed;right: 0;bottom: 0;min-width: 100%;min-height: 100%;"></div>
+    </body>
+</html>
