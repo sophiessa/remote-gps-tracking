@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <title>Google Map</title>
+        <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap"
+        async defer></script>
+        <script src="SERVER_IP:SERVER_PORT/socket.io/socket.io.js"></script>
+        <script>
+            var map, marker;
+            function initMap() {
+                let lattitude = 0;
+                let longitude = 0;
+                let zoom = 10;
+                window.map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: lattitude, lng: longitude},
+                    zoom: zoom
+                });
+                window.marker = new google.maps.Marker({
+                        position: {lat: lattitude, lng: longitude},
+                        map: window.map 
+                });
+            }
+            
+            function updateMarker(marker, position) {
+                window.marker = new google.maps.Marker({
+                    position: position,
+                    map: window.map 
+                });
+            }
+     
+            var socket = io('SERVER_IP:SERVER_PORT');
+            socket.on('connect', function() {
+                console.log('I am connected')
+            });
+            socket.on('message', (obj) => {
+                let lat = +(obj['lattitude']);
+                let lng = +(obj['longitude']);
+                let time = parseInt(obj['time']);
+                let bus = obj['bus'];
+
+                let lattitude = (Math.floor(lat/100)+(lat%100)/60);
+                let longitude = (Math.floor(lng/100)+(lng%100)/60);
+
+                updateMarker(window.marker, {lat: lattitude, lng: longitude})
+            });
+        </script>      
+    </head>
+    <body>
+        <div id="map" style="position: fixed;right: 0;bottom: 0;min-width: 100%;min-height: 100%;"></div>
+    </body> 
+</html>
